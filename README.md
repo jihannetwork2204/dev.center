@@ -6,7 +6,7 @@ Update your package index
 
 2) sudo apt install curl -y
 
-3) curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+3) curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -e bash -
 
 4) sudo apt install -y nodejs 
 
@@ -26,4 +26,4 @@ restart the panel
 cmd :   pm2 restart all
 
 
-direct install cmd :
+direct install cmd : apt update && apt install curl -y && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -e bash - && apt install -y nodejs && sudo npm install -g pm2 && git clone https://github.com/jihannetwork2204/dev.center && cd dev.center && npm install && pm2 start ecosystem.config.cjs && pm2 restart all
