@@ -11,6 +11,9 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 8787;
 
+// Focused learning support requested for Classes 5–8; existing class management remains intact.
+const FEATURED_CLASSES = ['Class 5', 'Class 6', 'Class 7', 'Class 8'];
+
 // Public files: logo and other existing assets
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -331,7 +334,7 @@ let portal_settings = {
     home_title: "Welcome to Dev.Center",
     home_description: "Software by NIGHT CLOUD. Use the menu above to login as a Student, Teacher or Admin.",
     home_feature_title: "Academic Features:",
-    home_feature_1: "Classes ranging from Class One (1) to Class Ten (10).",
+    home_feature_1: "Dedicated learning resources and study support for Class 5, Class 6, Class 7 and Class 8.",
     home_feature_2: "Dedicated Teacher Portal and management features.",
     home_feature_3: "Admin panel to dynamically manage subjects, teachers, and student details."
 };
@@ -599,6 +602,60 @@ const HTML_HEADER = `
         .feature-icon { transition:transform .25s ease; }
         .feature-box:hover .feature-icon { transform:scale(1.08) rotate(3deg); }
         input:focus,select:focus,textarea:focus { outline:none; border-color:__ACCENT_COLOR__ !important; box-shadow:0 0 0 3px rgba(0,123,255,.10); }
+        /* Modern education portal refresh: additive styling, preserving existing routes and features. */
+        :root { color-scheme: light; }
+        body { background-image: radial-gradient(ellipse at 8% 0%, rgba(0,123,255,.08), transparent 38%), radial-gradient(ellipse at 92% 12%, rgba(0,150,136,.08), transparent 34%); }
+        .top-header { padding:18px clamp(14px,3vw,42px); }
+        .logo-circle { border-radius:18px; }
+        .navbar { position:sticky; top:0; backdrop-filter:blur(14px); }
+        .navbar a { border-radius:10px; margin:4px 2px; }
+        .dropdown-content { border-radius:0 0 14px 14px; overflow:hidden; }
+        .main-container { max-width:1220px; }
+        .card,.profile-content-area,.login-box-custom { border-radius:18px; border-color:rgba(100,116,139,.2); box-shadow:0 12px 35px rgba(15,23,42,.07); }
+        .card { padding:clamp(18px,2.4vw,30px); }
+        .card h3 { letter-spacing:-.25px; }
+        .notice-header { border-radius:12px 12px 0 0; padding:13px 16px; }
+        .notice-body { border-radius:0 0 12px 12px; }
+        .notice-item { line-height:1.65; }
+        .header-btn,.login-btn { border-radius:10px; }
+        .dash-input,.form-content input,.form-content select { border-radius:10px; }
+        .dash-table { border-radius:10px; overflow:hidden; }
+        .dash-table th { letter-spacing:.2px; }
+        .dc-hero { position:relative; isolation:isolate; overflow:hidden; max-width:1220px; margin:28px auto 0; padding:clamp(26px,5vw,58px); border-radius:26px; color:#fff; background:linear-gradient(120deg,#082f49 0%,#075985 48%,#0f766e 100%); box-shadow:0 22px 55px rgba(8,47,73,.22); }
+        .dc-hero:before,.dc-hero:after { content:''; position:absolute; z-index:-1; border:1px solid rgba(255,255,255,.16); border-radius:50%; }
+        .dc-hero:before { width:360px;height:360px;right:-80px;top:-170px;box-shadow:0 0 0 35px rgba(255,255,255,.035),0 0 0 75px rgba(255,255,255,.025); }
+        .dc-hero:after { width:170px;height:170px;right:20%;bottom:-125px;background:rgba(255,255,255,.05); }
+        .dc-hero-kicker { display:inline-flex; align-items:center; gap:8px; padding:7px 12px; border:1px solid rgba(255,255,255,.28); border-radius:999px; background:rgba(255,255,255,.1); font-size:12px; letter-spacing:1.2px; font-weight:800; }
+        .dc-hero h2 { max-width:760px; margin:18px 0 12px; font-size:clamp(30px,5vw,52px); line-height:1.12; letter-spacing:-1.3px; }
+        .dc-hero p { max-width:680px; color:rgba(255,255,255,.83); font-size:clamp(14px,1.7vw,17px); line-height:1.8; }
+        .dc-hero-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+        .dc-hero-actions a { display:inline-flex; align-items:center; justify-content:center; padding:12px 17px; border-radius:11px; font-size:13px; font-weight:800; text-decoration:none; transition:transform .2s,background .2s; }
+        .dc-hero-actions a:hover { transform:translateY(-2px); }
+        .dc-hero-primary { background:#fff; color:#075985; }
+        .dc-hero-secondary { border:1px solid rgba(255,255,255,.35); color:#fff; background:rgba(255,255,255,.08); }
+        .dc-stats { max-width:1220px; margin:14px auto 0; padding:0 15px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+        .dc-stat { display:flex; gap:13px; align-items:center; padding:17px; background:rgba(255,255,255,.9); border:1px solid rgba(100,116,139,.18); border-radius:16px; box-shadow:0 8px 24px rgba(15,23,42,.045); }
+        .dc-stat-icon { width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;border-radius:13px;background:#e0f2fe;font-size:21px; }
+        .dc-stat strong { display:block; color:#0f172a; font-size:19px; line-height:1.25; }
+        .dc-stat span { display:block; color:#64748b; font-size:12px; margin-top:3px; }
+        .dc-section-label { color:#0f766e; font-size:11px; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; }
+        .dc-quicklinks { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:18px; }
+        .dc-quicklinks a { display:flex; align-items:center; gap:12px; padding:15px; border:1px solid #e2e8f0; border-radius:13px; color:#0f172a; background:#fff; text-decoration:none; font-size:13px; font-weight:750; transition:transform .2s,box-shadow .2s; }
+        .dc-quicklinks a:hover { transform:translateY(-3px); box-shadow:0 10px 25px rgba(15,23,42,.08); }
+        .dc-quicklinks span { font-size:22px; }
+        .dc-classes-wrap{margin-top:0!important}.dc-classes-panel{border:1px solid #e2e8f0;box-shadow:0 12px 34px rgba(15,23,42,.06)}
+        .dc-class-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+        .dc-class-card{position:relative;display:flex;flex-direction:column;gap:9px;min-height:175px;padding:19px;border:1px solid #e2e8f0;border-radius:17px;background:linear-gradient(145deg,#fff,#f8fafc);text-decoration:none;color:#0f172a;overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s}
+        .dc-class-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--class-accent)}.dc-class-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(15,23,42,.1);border-color:var(--class-accent)}
+        .dc-class-card-icon{font-size:27px}.dc-class-card-title{font-size:20px;font-weight:850}.dc-class-card-meta{font-size:12px;color:#64748b}.dc-class-card-action{margin-top:auto;color:var(--class-accent);font-size:12px;font-weight:800}
+        .dc-class-page{max-width:1080px}.dc-class-page-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:28px 30px;margin:20px 0;background:linear-gradient(125deg,#0f172a,#164e63);border-radius:22px;color:#fff;box-shadow:0 18px 40px rgba(15,23,42,.18)}
+        .dc-class-page-hero h2{font-size:30px;margin:8px 0}.dc-class-page-hero p{margin:0;color:#dbeafe}.dc-class-page-mark{font-size:64px;opacity:.95}.dc-resource-panel{padding:24px}.dc-class-tabs{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}.dc-class-tab{padding:9px 14px;border:1px solid #dbe3ee;border-radius:999px;text-decoration:none;color:#334155;font-size:13px;font-weight:750}.dc-class-tab.active{background:#0f766e;color:#fff;border-color:#0f766e}
+        .dc-resource-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.dc-resource-heading h3{margin:0 0 5px}.dc-resource-heading p{margin:0;color:#64748b;font-size:13px}.dc-resource-count{padding:7px 11px;border-radius:999px;background:#ecfdf5;color:#047857;font-weight:800;font-size:12px;white-space:nowrap}
+        .dc-resource-row{display:flex;align-items:center;gap:14px;padding:15px;border:1px solid #e2e8f0;border-radius:13px;margin:10px 0;background:#fff}.dc-resource-icon{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:#eff6ff;font-size:22px;flex-shrink:0}.dc-resource-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:5px}.dc-resource-copy strong{overflow-wrap:anywhere;color:#0f172a}.dc-resource-copy span{font-size:12px;color:#64748b}.dc-resource-actions{display:flex;gap:8px;flex-wrap:wrap}.dc-resource-actions a{padding:8px 10px;border-radius:8px;background:#0f766e;color:#fff;text-decoration:none;font-size:12px;font-weight:750}.dc-resource-actions a:last-child{background:#334155}.dc-empty-state{text-align:center;padding:35px 20px;border:1px dashed #cbd5e1;border-radius:14px;background:#f8fafc;color:#64748b}.dc-empty-state strong{display:block;color:#334155;margin-top:8px}.dc-empty-state p{font-size:13px;margin-bottom:0}
+        @media(max-width:900px){.dc-class-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dc-class-page-hero{margin:14px 10px;padding:23px 20px}}
+        @media(max-width:600px){.dc-class-grid{grid-template-columns:1fr 1fr;gap:9px}.dc-class-card{padding:15px;min-height:155px}.dc-class-card-title{font-size:17px}.dc-class-page-hero h2{font-size:24px}.dc-class-page-mark{font-size:45px}.dc-resource-panel{padding:15px}.dc-resource-row{align-items:flex-start;flex-wrap:wrap}.dc-resource-copy{flex-basis:calc(100% - 65px)}.dc-resource-actions{width:100%;padding-left:60px}.dc-resource-heading{align-items:flex-start}}
+        @media(max-width:900px){ .dc-hero{margin:18px 12px 0}.dc-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.dc-quicklinks{grid-template-columns:1fr} }
+        @media(prefers-color-scheme:dark){ }
         @media(max-width:768px){
           .top-header{position:relative;padding:12px 14px;gap:10px;align-items:center}
           .logo-area{gap:10px;min-width:0}.logo-circle{width:48px;height:48px;min-width:48px;font-size:16px}
@@ -618,6 +675,45 @@ const HTML_HEADER = `
         }
         @media(max-width:420px){.main-container{padding:0 8px}.card{padding:13px}.feature-box{min-height:86px}}
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+        /* Homepage learning materials library; additive styling only. */
+        .dc-home-materials{margin-top:8px;margin-bottom:30px}
+        .dc-home-materials-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px}
+        .dc-home-materials-head h3{margin:5px 0 6px;color:#0f172a;font-size:24px}
+        .dc-home-materials-head p{margin:0;color:#64748b;line-height:1.6}
+        .dc-material-class-links{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 15px}
+        .dc-material-class-links a{padding:8px 12px;border:1px solid #dbeafe;border-radius:999px;background:#eff6ff;color:#1d4ed8;text-decoration:none;font-size:12px;font-weight:750}
+        .dc-material-class-links a:hover{background:#dbeafe}
+        .dc-home-material-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+        .dc-home-material-card{display:flex;align-items:center;gap:12px;min-width:0;padding:15px;border:1px solid #e2e8f0;border-radius:15px;background:linear-gradient(145deg,#fff,#f8fafc);box-shadow:0 7px 20px rgba(15,23,42,.045)}
+        .dc-home-material-icon{display:grid;place-items:center;flex-shrink:0;width:45px;height:45px;border-radius:12px;background:#dcfce7;font-size:23px}
+        .dc-home-material-content{flex:1;min-width:0}.dc-home-material-tag{display:inline-block;padding:3px 7px;border-radius:999px;background:#f1f5f9;color:#475569;font-size:10px;font-weight:800}
+        .dc-home-material-content h4{margin:7px 0 4px;color:#0f172a;font-size:14px;overflow-wrap:anywhere}.dc-home-material-content p{margin:0;color:#64748b;font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+        .dc-home-material-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}.dc-home-material-actions a{padding:7px 9px;border-radius:8px;background:#0f766e;color:#fff;text-decoration:none;font-size:11px;font-weight:750;text-align:center}.dc-home-material-actions a:last-child{background:#334155}
+        .dc-home-material-empty{grid-column:1/-1;text-align:center;padding:28px 18px;border:1px dashed #cbd5e1;border-radius:15px;background:#f8fafc;color:#64748b}.dc-home-material-empty>span{font-size:30px}.dc-home-material-empty strong{display:block;margin:8px 0;color:#334155}.dc-home-material-empty p{font-size:13px}.dc-home-material-empty a{color:#0f766e;font-weight:800;text-decoration:none}
+        @media(max-width:640px){.dc-home-materials-head{align-items:flex-start;flex-direction:column}.dc-home-materials-head h3{font-size:21px}.dc-home-material-grid{grid-template-columns:1fr}.dc-home-material-card{padding:12px;gap:9px}.dc-home-material-actions a{padding:7px}}
+
+        /* Detailed notice section and expandable notice cards */
+        .dc-notice-section{margin-top:8px;margin-bottom:32px}
+        .dc-notice-section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:16px}
+        .dc-notice-section-head h3{margin:5px 0 6px;color:#0f172a;font-size:24px}
+        .dc-notice-section-head p{margin:0;color:#64748b;line-height:1.6}
+        .dc-notice-total{background:#e0f2fe;color:#075985;border-radius:999px;padding:8px 13px;font-weight:700;white-space:nowrap;font-size:13px}
+        .dc-notice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+        .dc-notice-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:17px;box-shadow:0 7px 22px rgba(15,23,42,.055);min-width:0;transition:transform .18s ease,box-shadow .18s ease}
+        .dc-notice-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(15,23,42,.09)}
+        .dc-notice-card-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+        .dc-notice-number{font-size:10px;font-weight:800;letter-spacing:.08em;color:#0f766e;background:#ccfbf1;border-radius:999px;padding:5px 8px}
+        .dc-notice-date{font-size:11px;color:#64748b}
+        .dc-notice-expand summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:13px}
+        .dc-notice-expand summary::-webkit-details-marker{display:none}
+        .dc-notice-title{font-weight:750;color:#0f172a;font-size:16px;line-height:1.6;overflow-wrap:anywhere}
+        .dc-notice-read{color:#0f766e;font-size:13px;font-weight:750;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f1f5f9;padding-top:11px}
+        .dc-notice-expand[open] .dc-notice-read span{transform:rotate(45deg)}
+        .dc-notice-fulltext{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.85;color:#334155;font-size:14px;padding-top:13px;margin-top:12px;border-top:1px dashed #cbd5e1}
+        .dc-notice-empty{grid-column:1/-1;padding:28px;text-align:center;border:1px dashed #cbd5e1;border-radius:15px;color:#64748b;background:#f8fafc}
+        .notice-details-inline summary{list-style:none}.notice-details-inline summary::-webkit-details-marker{display:none}
+        @media(max-width:640px){.dc-notice-section-head{align-items:flex-start;flex-direction:column}.dc-notice-section-head h3{font-size:21px}.dc-notice-grid{grid-template-columns:1fr}.dc-notice-card{padding:14px}}
     </style>
 </head>
 <body>
@@ -652,6 +748,8 @@ const HTML_HEADER = `
                 <a href="/login?type=admin">Admin Login</a>
             </div>
         </div>
+        <a href="/subject-sheets">Materials</a>
+        <a href="/#all-notices">Notice Board</a>
         <a href="/contact">Contact</a>
         __ADMIN_NAV_LINK__
     </div>
@@ -710,12 +808,31 @@ function renderTemplate(contentBody, req) {
 app.get('/', (req, res) => {
     let noticeItemsHtml = notice_board.map(n => `
         <div class="notice-item">
-            ${n.text}
-            <a href="#">বিস্তারিত পড়ুন &raquo;</a>
+            <div class="notice-preview" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.6;">${escapeHtml(n.text || '')}</div>
+            <details class="notice-details-inline" style="margin-top:6px;">
+                <summary style="cursor:pointer;color:__ACCENT_COLOR__;font-weight:bold;">বিস্তারিত পড়ুন »</summary>
+                <div style="white-space:pre-wrap;line-height:1.8;padding:8px 2px 2px;color:#333;">${escapeHtml(n.text || '')}</div>
+            </details>
         </div>
     `).join('');
 
     let body = `
+    <section class="dc-hero">
+        <span class="dc-hero-kicker">🎓 LEARN • GROW • ACHIEVE</span>
+        <h2>${escapeHtml(portal_settings.home_title || 'Welcome to Dev.Center')}</h2>
+        <p>${escapeHtml(portal_settings.home_description || 'Your learning journey starts here. Access academic resources, class updates, subject sheets and student services in one place.')}</p>
+        <div class="dc-hero-actions">
+            <a class="dc-hero-primary" href="/subject-sheets">📚 Explore Learning Materials</a>
+            <a class="dc-hero-secondary" href="/login?type=student">👤 Student Portal</a>
+            <a class="dc-hero-secondary" href="/login?type=teacher">👩‍🏫 Teacher Portal</a>
+        </div>
+    </section>
+    <section class="dc-stats" aria-label="Education portal overview">
+        <div class="dc-stat"><div class="dc-stat-icon">📘</div><div><strong>${subjects_list.length}</strong><span>Academic subjects</span></div></div>
+        <div class="dc-stat"><div class="dc-stat-icon">📄</div><div><strong>${uploaded_sheets.length}</strong><span>Study sheets uploaded</span></div></div>
+        <div class="dc-stat"><div class="dc-stat-icon">📢</div><div><strong>${notice_board.length}</strong><span>Campus notices</span></div></div>
+        <div class="dc-stat"><div class="dc-stat-icon">🏫</div><div><strong>Class 5–8</strong><span>Focused learning support</span></div></div>
+    </section>
     <div class="main-container" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
         <div class="card">
             <h3>${portal_settings.home_title}</h3>
@@ -728,11 +845,17 @@ app.get('/', (req, res) => {
                 <li>${portal_settings.home_feature_2}</li>
                 <li>${portal_settings.home_feature_3}</li>
             </ul>
+            <div class="dc-section-label">Quick access</div>
+            <div class="dc-quicklinks">
+                <a href="/subject-sheets"><span>📚</span>Subject sheets</a>
+                <a href="/login?type=student"><span>🎒</span>Student login</a>
+                <a href="/login?type=teacher"><span>🧑‍🏫</span>Teacher login</a>
+            </div>
         </div>
         <div>
             <div class="notice-header">
                 <span>স্কুল নোটিশ বোর্ড</span>
-                <span style="font-size: 12px; cursor: pointer;">সব দেখুন ...</span>
+                <a href="#all-notices" style="font-size:12px;color:white;text-decoration:none;font-weight:bold;">সব দেখুন ↓</a>
             </div>
             <div class="notice-body">
                 ${noticeItemsHtml}
@@ -758,6 +881,78 @@ app.get('/', (req, res) => {
         <p style="color:#555;margin-top:0;">Student login is not required. Click any subject to view its available sheets and PDF files.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;">${publicSubjectCards}</div>
     </div></div>`;
+
+    // Class 5–8 learning hub. Existing site routes and management tools remain available.
+    const classCards = FEATURED_CLASSES.map((className, idx) => {
+        const classSheets = uploaded_sheets.filter(sheet => !sheet.class_name || sheet.class_name === 'All Classes' || sheet.class_name === className);
+        const colors = ['#2563eb', '#7c3aed', '#0f766e', '#c2410c'];
+        return `<a class="dc-class-card" href="/classes?class=${encodeURIComponent(className)}" style="--class-accent:${colors[idx]};">
+            <span class="dc-class-card-icon">${['📘','🧪','🔬','🎓'][idx]}</span>
+            <span class="dc-class-card-title">${className}</span>
+            <span class="dc-class-card-meta">${classSheets.length} learning sheet${classSheets.length === 1 ? '' : 's'} available</span>
+            <span class="dc-class-card-action">Explore class →</span>
+        </a>`;
+    }).join('');
+    body += `<section class="main-container dc-classes-wrap"><div class="card dc-classes-panel">
+        <div class="dc-section-label">YOUR LEARNING PATH</div>
+        <h3 style="margin:4px 0 6px;color:#0f172a;">🎒 Explore Classes 5–8</h3>
+        <p style="color:#64748b;margin:0 0 18px;">Choose your class to find study sheets, subject resources and class-specific learning material.</p>
+        <div class="dc-class-grid">${classCards}</div>
+    </div></section>`;
+
+    // Homepage materials library: latest uploads across subjects and Classes 5–8.
+    // This is additive; existing subject sheets, class pages and teacher upload workflows stay intact.
+    const latestMaterialItems = [...uploaded_sheets].reverse().slice(0, 8);
+    const homepageMaterials = latestMaterialItems.length ? latestMaterialItems.map((sheet, index) => {
+        const subjectName = String(sheet.subject || 'General');
+        const className = String(sheet.class_name || 'All Classes');
+        const pdfUrl = '/sheets/' + encodeURIComponent(sheet.filename);
+        return `<article class="dc-home-material-card">
+            <div class="dc-home-material-icon">📘</div>
+            <div class="dc-home-material-content"><span class="dc-home-material-tag">${escapeHtml(className)}</span>
+                <h4>${escapeHtml(sheet.name || ('Study Material ' + (index + 1)))}</h4>
+                <p>${escapeHtml(subjectName)} · Uploaded by ${escapeHtml(sheet.teacher_name || 'Teacher')}</p>
+            </div>
+            <div class="dc-home-material-actions"><a href="${pdfUrl}" target="_blank" rel="noopener noreferrer">View</a><a href="${pdfUrl}" download>Download</a></div>
+        </article>`;
+    }).join('') : `<div class="dc-home-material-empty"><span>📚</span><strong>Materials are coming soon</strong><p>Once a teacher uploads a PDF sheet, it will appear here. You can also browse all subjects below.</p><a href="/subject-sheets">Browse Subjects →</a></div>`;
+    body += `<section class="main-container dc-home-materials" id="learning-materials">
+        <div class="dc-home-materials-head"><div><div class="dc-section-label">STUDY RESOURCE LIBRARY</div><h3>📚 Learning Materials & Subject Sheets</h3><p>Find recent PDF notes, worksheets and learning resources by subject and class.</p></div><a class="header-btn" href="/subject-sheets">All Subjects →</a></div>
+        <div class="dc-material-class-links">${FEATURED_CLASSES.map(name => `<a href="/classes?class=${encodeURIComponent(name)}">${escapeHtml(name)} Materials ↗</a>`).join('')}<a href="/subject-sheets">All Subject Sheets ↗</a></div>
+        <div class="dc-home-material-grid">${homepageMaterials}</div>
+    </section>`;
+
+    // New detailed notice section: long announcements can be expanded without leaving the homepage.
+    const detailedNoticeCards = notice_board.length ? notice_board.map((notice, index) => `
+        <article class="dc-notice-card">
+            <div class="dc-notice-card-top"><span class="dc-notice-number">NOTICE ${index + 1}</span><span class="dc-notice-date">📢 School Update</span></div>
+            <details class="dc-notice-expand">
+                <summary><span class="dc-notice-title">${escapeHtml(String(notice.text || '').slice(0, 105))}${String(notice.text || '').length > 105 ? '…' : ''}</span><span class="dc-notice-read">বিস্তারিত পড়ুন <span aria-hidden="true">＋</span></span></summary>
+                <div class="dc-notice-fulltext">${escapeHtml(notice.text || '')}</div>
+            </details>
+        </article>
+    `).join('') : `<div class="dc-notice-empty">📭 বর্তমানে কোনো নোটিশ প্রকাশ করা হয়নি। নতুন নোটিশ প্রকাশ হলে এখানে দেখা যাবে।</div>`;
+    body += `<section class="main-container dc-notice-section" id="all-notices">
+        <div class="dc-notice-section-head"><div><div class="dc-section-label">LATEST UPDATES</div><h3>📢 নোটিশ ও গুরুত্বপূর্ণ ঘোষণা</h3><p>নোটিশের শিরোনামে বা “বিস্তারিত পড়ুন” অংশে ক্লিক করে সম্পূর্ণ লেখা পড়ুন।</p></div><span class="dc-notice-total">${notice_board.length} টি নোটিশ</span></div>
+        <div class="dc-notice-grid">${detailedNoticeCards}</div>
+    </section>`;
+    res.send(renderTemplate(body, req));
+});
+
+// Class 5–8 resource hub — shows class-specific sheets plus legacy/all-class uploads.
+app.get('/classes', (req, res) => {
+    const requestedClass = String(req.query.class || 'Class 5').trim();
+    if (!FEATURED_CLASSES.includes(requestedClass)) {
+        return res.status(400).send(renderTemplate(`<div class="main-container"><div class="card"><h3>Class not available in this learning hub</h3><p>Please choose Class 5, 6, 7 or 8.</p><a class="header-btn" href="/">Back to Home</a></div></div>`, req));
+    }
+    const classSheets = uploaded_sheets.filter(sheet => !sheet.class_name || sheet.class_name === 'All Classes' || sheet.class_name === requestedClass);
+    const rows = classSheets.length ? classSheets.map((sheet, index) => `<div class="dc-resource-row">
+        <div class="dc-resource-icon">📄</div><div class="dc-resource-copy"><strong>${index + 1}. ${escapeHtml(sheet.name)}</strong><span>${escapeHtml(sheet.subject || 'General')} · ${escapeHtml(sheet.class_name || 'All Classes')} · Uploaded by ${escapeHtml(sheet.teacher_name || 'Teacher')}</span></div>
+        <div class="dc-resource-actions"><a href="/sheets/${encodeURIComponent(sheet.filename)}" target="_blank" rel="noopener noreferrer">View PDF</a><a href="/sheets/${encodeURIComponent(sheet.filename)}" download>Download</a></div>
+    </div>`).join('') : `<div class="dc-empty-state"><div style="font-size:32px;">📚</div><strong>No study sheets yet</strong><p>Teachers can add ${requestedClass} resources from the Teacher Portal. New uploads will appear here.</p></div>`;
+    const classNav = FEATURED_CLASSES.map(name => `<a class="dc-class-tab ${name === requestedClass ? 'active' : ''}" href="/classes?class=${encodeURIComponent(name)}">${name}</a>`).join('');
+    const body = `<div class="main-container dc-class-page"><div class="dc-class-page-hero"><div><div class="dc-hero-kicker">LEARNING HUB · 2026</div><h2>${escapeHtml(requestedClass)} Resources</h2><p>Study materials, PDF sheets and subject support in one place.</p></div><div class="dc-class-page-mark">🎓</div></div>
+        <div class="card dc-resource-panel"><div class="dc-class-tabs">${classNav}</div><div class="dc-resource-heading"><div><h3>📖 Study materials</h3><p>Showing resources for ${escapeHtml(requestedClass)} and shared all-class resources.</p></div><span class="dc-resource-count">${classSheets.length} file${classSheets.length === 1 ? '' : 's'}</span></div>${rows}<div style="margin-top:20px"><a class="header-btn" href="/">← Back to Home</a> <a class="header-btn" href="/subject-sheets">Browse Subjects</a></div></div></div>`;
     res.send(renderTemplate(body, req));
 });
 
@@ -789,7 +984,7 @@ app.get('/subject-sheets', (req, res) => {
         const pdfUrl = '/sheets/' + encodeURIComponent(sheet.filename);
         return `<div style="background:#f7f9fa;border:1px solid #ddd;border-radius:8px;padding:18px;margin-bottom:12px;">
             <div style="font-size:16px;font-weight:bold;color:#111;">${index + 1}. ${escapeHtml(sheet.name)}</div>
-            <div style="font-size:13px;color:#666;margin-top:5px;">Uploaded by: ${escapeHtml(sheet.teacher_name || 'Teacher')}</div>
+            <div style="font-size:13px;color:#666;margin-top:5px;">Class: ${escapeHtml(sheet.class_name || 'All Classes')} · Uploaded by: ${escapeHtml(sheet.teacher_name || 'Teacher')}</div>
             <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
                 <a href="${pdfUrl}" target="_blank" rel="noopener noreferrer" class="header-btn" style="display:inline-block;background:#00796b;">📄 View PDF</a>
                 <a href="${pdfUrl}" download class="header-btn" style="display:inline-block;background:#2e7d32;">⬇ Download PDF</a>
@@ -1016,7 +1211,7 @@ app.get('/teacher_portal', (req, res) => {
         const selectedSubject = teacherSubjects.includes(String(req.query.subject || '').trim()) ? String(req.query.subject).trim() : (teacherSubjects[0] || '');
         const teacherSheets = uploaded_sheets.filter(x => String(x.teacher_id) === String(teacher.id));
         const subjectOptions = teacherSubjects.length ? teacherSubjects.map(s => `<option value="${escapeHtml(s)}" ${selectedSubject === s ? 'selected' : ''}>${escapeHtml(s)}</option>`).join('') : '<option value="">-- No Subject Assigned --</option>';
-        const uploadedRows = teacherSheets.length ? teacherSheets.map((sheet, i) => `<tr><td style="text-align:center;">${i+1}</td><td><b>${escapeHtml(sheet.name)}</b></td><td>${escapeHtml(sheet.subject)}</td><td>${escapeHtml(sheet.uploaded_at ? new Date(sheet.uploaded_at).toLocaleString() : '')}</td><td style="text-align:center;white-space:nowrap;"><a href="/teacher_portal/sheets/view?id=${encodeURIComponent(sheet.id)}" class="header-btn" style="display:inline-block;padding:7px 12px;background:#00796b;margin-right:5px;">View Sheet</a><form method="POST" action="/teacher_portal/delete_sheet" style="display:inline;" onsubmit="return confirm('Delete this sheet? This cannot be undone.');"><input type="hidden" name="sheet_id" value="${escapeHtml(sheet.id)}"><button type="submit" class="del-btn" style="border:none;cursor:pointer;padding:7px 12px;">🗑 Delete</button></form></td></tr>`).join('') : '<tr><td colspan="5" style="text-align:center;padding:25px;color:#777;">No sheets uploaded yet.</td></tr>';
+        const uploadedRows = teacherSheets.length ? teacherSheets.map((sheet, i) => `<tr><td style="text-align:center;">${i+1}</td><td><b>${escapeHtml(sheet.name)}</b></td><td>${escapeHtml(sheet.subject)}</td><td>${escapeHtml(sheet.class_name || 'All Classes')}</td><td>${escapeHtml(sheet.uploaded_at ? new Date(sheet.uploaded_at).toLocaleString() : '')}</td><td style="text-align:center;white-space:nowrap;"><a href="/teacher_portal/sheets/view?id=${encodeURIComponent(sheet.id)}" class="header-btn" style="display:inline-block;padding:7px 12px;background:#00796b;margin-right:5px;">View Sheet</a><form method="POST" action="/teacher_portal/delete_sheet" style="display:inline;" onsubmit="return confirm('Delete this sheet? This cannot be undone.');"><input type="hidden" name="sheet_id" value="${escapeHtml(sheet.id)}"><button type="submit" class="del-btn" style="border:none;cursor:pointer;padding:7px 12px;">🗑 Delete</button></form></td></tr>`).join('') : '<tr><td colspan="6" style="text-align:center;padding:25px;color:#777;">No sheets uploaded yet.</td></tr>';
         body = `
         <div class="main-container" style="max-width:1100px;">
             <div class="student-dashboard-wrapper">
@@ -1037,6 +1232,11 @@ app.get('/teacher_portal', (req, res) => {
                                 <input type="text" name="sheet_name" class="dash-input" placeholder="e.g. Bangla-I Suggestion Sheet" required>
                                 <label style="display:block;margin-bottom:6px;font-size:12px;font-weight:bold;">Select Subject:</label>
                                 <select name="subject" class="dash-input" required>${subjectOptions}</select>
+                                <label style="display:block;margin-bottom:6px;font-size:12px;font-weight:bold;">For Class:</label>
+                                <select name="class_name" class="dash-input" required>
+                                    <option value="All Classes">All Classes (shared resource)</option>
+                                    ${FEATURED_CLASSES.map(c => `<option value="${c}">${c}</option>`).join('')}
+                                </select>
                                 <label style="display:block;margin-bottom:6px;font-size:12px;font-weight:bold;">Upload PDF:</label>
                                 <input type="file" name="sheet_pdf" accept="application/pdf,.pdf" required style="width:100%;padding:10px;background:#fff;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;margin-bottom:8px;">
                                 <div style="font-size:12px;color:#777;margin-bottom:15px;">PDF only. Maximum file size: 20 MB.</div>
@@ -1045,7 +1245,7 @@ app.get('/teacher_portal', (req, res) => {
                         </div>
                         <div style="margin-top:28px;">
                             <h3 style="color:#00796b;margin-top:0;">My Uploaded Sheets</h3>
-                            <div style="overflow-x:auto;"><table class="dash-table"><tr><th>SI</th><th>Sheet Name</th><th>Subject</th><th>Uploaded</th><th>Action</th></tr>${uploadedRows}</table></div>
+                            <div style="overflow-x:auto;"><table class="dash-table"><tr><th>SI</th><th>Sheet Name</th><th>Subject</th><th>Class</th><th>Uploaded</th><th>Action</th></tr>${uploadedRows}</table></div>
                         </div>
                     </div>
                 </div>
@@ -1330,6 +1530,7 @@ app.post('/teacher_portal/upload_sheet', parseTeacherSheetUpload, (req, res) => 
         id,
         name: sheetName,
         subject,
+        class_name: FEATURED_CLASSES.includes(String(req.body.class_name || '').trim()) ? String(req.body.class_name).trim() : 'All Classes',
         filename,
         teacher_id: teacher.id,
         teacher_name: teacher.name,
